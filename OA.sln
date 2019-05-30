@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA", "OA\OA.csproj", "{72105676-2A5F-45C3-B463-DEDBE76FFF08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA2", "OA\OA2.csproj", "{72105676-2A5F-45C3-B463-DEDBE76FFF08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA3", "OA3\OA3.csproj", "{38A83691-2DEB-486B-A2BE-30BFA41CC07C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{CEE99F7B-A4EB-4195-BB5A-C1CCAB6573CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{72105676-2A5F-45C3-B463-DEDBE76FFF08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72105676-2A5F-45C3-B463-DEDBE76FFF08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72105676-2A5F-45C3-B463-DEDBE76FFF08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A83691-2DEB-486B-A2BE-30BFA41CC07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A83691-2DEB-486B-A2BE-30BFA41CC07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A83691-2DEB-486B-A2BE-30BFA41CC07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A83691-2DEB-486B-A2BE-30BFA41CC07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEE99F7B-A4EB-4195-BB5A-C1CCAB6573CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEE99F7B-A4EB-4195-BB5A-C1CCAB6573CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEE99F7B-A4EB-4195-BB5A-C1CCAB6573CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEE99F7B-A4EB-4195-BB5A-C1CCAB6573CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
