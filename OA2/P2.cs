@@ -19,11 +19,11 @@ namespace OA2
             await TPLDependent();
             Console.WriteLine("TPL dependent flow END\n");
             Console.WriteLine("Starting thread native dependent flow");
-            ThreadDependent();
+            await ThreadDependent();
             Console.WriteLine("Thread native dependent flow END");
         }
 
-        static void ThreadDependent()
+        static Task ThreadDependent()
         {
             for (int n = 4; n <= 512; n *= 2)
             {
@@ -183,6 +183,8 @@ namespace OA2
                 Console.WriteLine($"Calculations done for {n}x{n} in {s.Elapsed.TotalMilliseconds}ms!");
                 // u.Print();
             }
+
+            return Task.CompletedTask;
         }
         private static async Task TPLDependent()
         {
