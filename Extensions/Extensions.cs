@@ -232,6 +232,24 @@ namespace Extensions
         /// </summary>
         public static double normalizer = 1.0 / 100.0;
         private static readonly Random _rand = new Random();
+
+        public static void Print(this int[,] arr, int tolerance = 5)
+        {
+            var asm = Assembly.GetEntryAssembly()?.DefinedTypes?.FirstOrDefault();
+            Console.WriteLine($"Lab: {asm?.Namespace}"); 
+            var a = arr.GetLength(0);
+            var b = arr.GetLength(1);
+            for (int i = 0; i < a; i++)
+            {
+                for (int j = 0; j < b; j++)
+                {
+                    Console.Write(arr[i,j] + new string(' ', 2));
+                }
+
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
         public static void Print(this IEnumerable<double[]> arr, int tolerance = 5)
         {
             var asm = Assembly.GetEntryAssembly()?.DefinedTypes?.FirstOrDefault();
