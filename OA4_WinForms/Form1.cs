@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Extensions;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
-using Color = Microsoft.Msagl.Drawing.Color;
 
 namespace OA4_WinForms
 {
@@ -21,19 +14,7 @@ namespace OA4_WinForms
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
 
-
-        private static void CreateLinks(int[,] depMatrix)
-        {
-            var r = new int[depMatrix.GetLength(0), depMatrix.GetLength(1)];
-            for (int i = 0; i < depMatrix.GetLength(0); i++)
-            {
-
-            }
-        }
 
         static readonly Random _rand = new Random();
         private int[,] depMatrix = { };
@@ -51,27 +32,27 @@ namespace OA4_WinForms
         private void Gen_matrix_btn_Click(object sender, EventArgs e)
         {
             int n;
-            if (!int.TryParse(vertices_count_inp.Text, out n) || n < 0)
+            if (!int.TryParse(vertices_count_inp.Text, out n) || n < 1)
+            {
+                //show error??
                 n = 5;
-
+            } 
             depMatrix = new int[n, n];
 
             Randomize(depMatrix);
 
-            CreateLinks(depMatrix);
-
             matrix_output.ResetText();
 
-            matrix_output.AppendText(string.Join("", PrintTo(depMatrix)));
+            matrix_output.AppendText(string.Join("", ShowMatrix()));
         }
 
-        private IEnumerable<char> PrintTo(int[,] depMatrix)
+        private IEnumerable<char> ShowMatrix()
         {
             for (int i = 0; i < depMatrix.GetLength(0); i++)
             {
                 for (int j = 0; j < depMatrix.GetLength(1); j++)
                 {
-                    yield return depMatrix[i, j].ToString()[0];
+                    yield return (char)(depMatrix[i, j] + '0');
                     yield return ' ';
                 }
 
@@ -85,11 +66,7 @@ namespace OA4_WinForms
             var viewer = new GViewer();
             var graph = GenerateGraph();
             if (graph == default) return;
-            //Node c = graph.FindNode("C"); 
-            //c.Attr.Shape = Shape.Circle;
-            //bind the graph to the viewer 
             viewer.Graph = graph;
-            //associate the viewer with the form 
             form.SuspendLayout();
             viewer.CalculateLayout(graph);
             viewer.Dock = DockStyle.Fill;
@@ -137,6 +114,7 @@ namespace OA4_WinForms
             }
             catch
             {
+                // show error??
                 // ignored
             }
         }

@@ -76,7 +76,7 @@
             this.matrix_output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.matrix_output.Location = new System.Drawing.Point(195, 55);
             this.matrix_output.Name = "matrix_output";
-            this.matrix_output.Size = new System.Drawing.Size(396, 202);
+            this.matrix_output.Size = new System.Drawing.Size(396, 324);
             this.matrix_output.TabIndex = 3;
             this.matrix_output.Text = "";
             this.matrix_output.WordWrap = false;
@@ -86,15 +86,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(784, 461);
             this.Controls.Add(this.matrix_output);
             this.Controls.Add(this.vertices_count_inp);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.calculate_graph_btn);
             this.Controls.Add(this.gen_matrix_btn);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
