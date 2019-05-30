@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA2", "OA\OA2.csproj", "{72105676-2A5F-45C3-B463-DEDBE76FFF08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA2", "OA2\OA2.csproj", "{72105676-2A5F-45C3-B463-DEDBE76FFF08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OA3", "OA3\OA3.csproj", "{38A83691-2DEB-486B-A2BE-30BFA41CC07C}"
 EndProject
