@@ -1,6 +1,6 @@
 ﻿using Extensions;
 using System;
-using System.Diagnostics;
+using System.Diagnostics; 
 using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.ArrayExtensions;
@@ -12,12 +12,183 @@ namespace OA2
         private static readonly Random _rand = new Random();
         static async Task Main(string[] args)
         {
-            var lcts = new LimitedConcurrencyLevelTaskScheduler(10);
-            var factory = new TaskFactory(lcts);
-            var cts = new CancellationTokenSource();
             lowerRandBounds = 1;
             maxRandBounds = 1000;
             normalizer = 1.0 / 100;
+            Console.WriteLine("Starting TPL dependent flow");
+            await TPLDependent();
+            Console.WriteLine("TPL dependent flow END\n");
+            Console.WriteLine("Starting thread native dependent flow");
+            ThreadDependent();
+            Console.WriteLine("Thread native dependent flow END");
+        }
+
+        static void ThreadDependent()
+        {
+            for (int n = 4; n <= 512; n *= 2)
+            {
+                double[,] A1 = { }, A2 = { }, B2 = { }, C2 = { }, B2_C2_Add = { }, Y3 = { }, y3power3 = { }, y3power2 = { };
+                double[] b1 = { }, c1 = { }, b = { }, y1 = { }, y2 = { };
+                double y2y2T = 0;
+                var A1thread = new Thread(() => A1 = AllocateRandomSquareMatrix(n));
+                var A2thread = new Thread(() => A2 = AllocateRandomSquareMatrix(n));
+                var B2thread = new Thread(() => B2 = AllocateRandomSquareMatrix(n));
+                var b1thread = new Thread(() => b1 = AllocateRandomVector(n));
+                var c1thread = new Thread(() => c1 = AllocateRandomVector(n));
+
+                Console.WriteLine($"Threads started.. Matrix size: {n}");
+                Stopwatch s = new Stopwatch();
+                s.Start();
+                A1thread.Start();
+                A2thread.Start();
+                B2thread.Start();
+                b1thread.Start();
+                c1thread.Start();
+
+                var K1 = _rand.Next(100) * .00001;
+                var K2 = _rand.Next(100) * .00001;
+                /*
+                 b = even 3/(Math.Pow(i,2) +3)
+                 b = odd 3/i  */
+                var bthread = new Thread(() =>
+                {
+                    b = FindVectorB(n,
+                        i => 3.0 / (Math.Pow(i, 2) + 3),
+                        i => 3.0 / i);
+                });
+                bthread.Start();
+                // Cij = 1/(i+j)*2;
+                var C2thread = new Thread(() =>
+                {
+                    C2 = FindMatrixC(n, (i, j) => 1.0 / (i + j) * 2);
+                });
+                C2thread.Start();
+
+                var y1thread = new Thread(() =>
+                {
+                    A1thread.Join();
+                    bthread.Join();
+                    y1 = Multiply(A1, b);
+                });
+                y1thread.Start();
+                // y2 = A1*(3*b1+c1) 
+                var y2thread = new Thread(() =>
+                {
+                    A1thread.Join();
+                    b1thread.Join();
+                    c1thread.Join();
+                    y2 = Multiply(A1, Add(Multiply(3, b1), c1));
+                });
+                y2thread.Start();
+                var B2_C2_Addthread = new Thread(() =>
+                {
+                    C2thread.Join();
+                    B2thread.Join();
+                    B2_C2_Add = Add(B2, C2);
+                });
+                B2_C2_Addthread.Start();
+                var Y3thread = new Thread(() =>
+                {
+                    A2thread.Join();
+                    B2_C2_Addthread.Join();
+                    Y3 = Multiply(A2, B2_C2_Add);
+                });
+                Y3thread.Start();
+                var y3power3thread = new Thread(() =>
+                {
+                    Y3thread.Join();
+                    y3power3 = MatrixPower(Y3, 3);
+                });
+                y3power3thread.Start();
+                var y3power2thread = new Thread(() =>
+                {
+                    Y3thread.Join();
+                    y3power2 = MatrixPower(Y3, 2);
+                });
+                y3power2thread.Start();
+
+                double[,] K1Y33 = { };
+                var K1Y33thread = new Thread(() =>
+                {
+                    y3power3thread.Join();
+                    K1Y33 = Multiply(y3power3, K1);
+                });
+                K1Y33thread.Start();
+                var y2y2Tthread = new Thread(() =>
+                {
+                    y2thread.Join();
+                    y2y2T = Multiply(y2, y2);
+                });
+                y2y2Tthread.Start();
+                double[,] K1Y33y2y2T = { };
+                var K1Y33y2y2Tthread = new Thread(() =>
+                {
+                    K1Y33thread.Join();
+                    y2y2Tthread.Join();
+                    K1Y33y2y2T = Multiply(K1Y33, y2y2T);
+                });
+                K1Y33y2y2Tthread.Start();
+
+                double[,] _2phV = { };
+                var _2ph = new Thread(() =>
+                {
+                    K1Y33y2y2Tthread.Join();
+                    y3power3thread.Join();
+                    _2phV = Add(K1Y33y2y2T, y3power3);
+                });
+                _2ph.Start();
+                double[,] _3phV = { };
+                var _3ph = new Thread(() =>
+                {
+                    _2ph.Join();
+                    _3phV = Substract(_2phV, Y3);
+                });
+                _3ph.Start();
+                double _4phV = 0;
+                var _4ph = new Thread(() =>
+                {
+                    y2thread.Join();
+                    y1thread.Join();
+                    _4phV = Multiply(y2, y1);
+                });
+                _4ph.Start();
+                double[,] _5phV = { };
+                var _5ph = new Thread(() =>
+                {
+                    _4ph.Join();
+                    _3ph.Join();
+                    _5phV = Add(_3phV, _4phV);
+                });
+                _5ph.Start();
+                double[] _6phV = { };
+                var _6ph = new Thread(() =>
+                {
+                    y3power2thread.Join();
+                    y1thread.Join();
+                    _6phV = Multiply(Multiply(y3power2, K2), y1);
+                });
+                _6ph.Start();
+                double[,] x = { };
+                var _7ph = new Thread(() =>
+                {
+                    _5ph.Join();
+                    _6ph.Join();
+                    x = Add(_5phV, _6phV);
+                });
+                // x = (K1 * Y3 * y2 * y2t) + Math.Pow(Y3,3) - Y3 - (y2 * y1t) + (K2 * Math.Pow(Y3,2) * y1t)
+
+                _7ph.Start();
+                _7ph.Join();
+                s.Stop();
+                Console.WriteLine($"Calculations done for {n}x{n} in {s.Elapsed.TotalMilliseconds}ms!");
+                // u.Print();
+            }
+        }
+        private static async Task TPLDependent()
+        {
+            var lcts = new LimitedConcurrencyLevelTaskScheduler(10);
+            var factory = new TaskFactory(lcts);
+            var cts = new CancellationTokenSource();
             for (int n = 4; n <= 512; n *= 2)
             {
                 var A1task = factory.StartNew(() => AllocateRandomSquareMatrix(n), cts.Token);

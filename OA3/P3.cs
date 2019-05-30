@@ -14,8 +14,7 @@ namespace OA3
                 MultiplyRecursively
             };
             foreach (var method in methods)
-            {
-                double avgAcc = 0;
+            { 
                 Console.WriteLine($"Calculations with {method.Method.Name}..");
 
                 for (int n = 5; n <= 500; n *= 2 + 1)
@@ -24,11 +23,9 @@ namespace OA3
                     var s = new Stopwatch();
                     s.Start();
                     var _ = method(CreateAmatrix(n), CreateBmatrix(n));
-                    s.Stop();
-                    avgAcc += 1.0 / 5 * s.ElapsedMilliseconds;
+                    s.Stop(); 
                     Console.WriteLine($"Calculations done for {n}x{n} in {s.Elapsed.TotalMilliseconds}ms!");
-                }
-                Console.WriteLine($"Avg: {avgAcc}ms");
+                } 
             }
         }
 
